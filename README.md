@@ -10,9 +10,10 @@ Using
 -----
 
 The script has the following three modes inside:
- -- dry-run mode;
- -- copy mode;
- -- move mode.
+
+ - dry-run mode;
+ - copy mode;
+ - move mode.
 
 The 'dry-run' mode can be used to check what the script will do with photos.
 
