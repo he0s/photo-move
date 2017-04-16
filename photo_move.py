@@ -9,6 +9,10 @@ import shutil
 import sys
 import traceback
 
+from multiprocessing import Pool, cpu_count, Process
+
+COUNT = 5
+
 
 class Photo:
     """
@@ -101,8 +105,11 @@ class Photo:
                         os.makedirs(self.dest)
                         _operate_file(self)
                     except Exception as e:
-                        logging.error('Error: {}'.format(e))
-                        logging.error(traceback.print_exc(e))
+                        if e.errno == 17 and e.strerror == 'File exists':
+                            _operate_file(self)
+                        else:
+                            logging.error('Error: {}'.format(e))
+                            logging.error(traceback.print_exc(e))
                 else:
                     logging.info(
                         'Moving of the file {}'.format(self.path)
@@ -142,6 +149,9 @@ def file_list(path):
         sys.exit(0)
 
 
+def operate(file_obj):
+    file_obj.mv_file()
+
 
 def move_func(args):
     """
@@ -152,9 +162,14 @@ def move_func(args):
 
     if os.path.exists(args.source):
         data = file_list(args.source)
-    for i in data:
-        photo = Photo(i, args.destination, 'move')
-        photo.mv_file()
+
+        if data:
+            data = [Photo(i, args.destination, 'move') for i in data]
+
+            pool = Pool(cpu_count()*COUNT)
+            pool.map(operate, data)
+            pool.close()
+            pool.join()
 
 
 def dry_func(args):
@@ -166,9 +181,14 @@ def dry_func(args):
 
     if os.path.exists(args.source):
         data = file_list(args.source)
-    for i in data:
-        photo = Photo(i, args.destination, 'dry-run')
-        photo.mv_file()
+
+        if data:
+            data = [Photo(i, args.destination, 'dry-run') for i in data]
+
+            pool = Pool(cpu_count()*COUNT)
+            pool.map(operate, data)
+            pool.close()
+            pool.join()
 
 
 def copy_func(args):
@@ -180,9 +200,14 @@ def copy_func(args):
 
     if os.path.exists(args.source):
         data = file_list(args.source)
-    for i in data:
-        photo = Photo(i, args.destination, 'copy')
-        photo.mv_file()
+
+        if data:
+            data = [Photo(i, args.destination, 'copy') for i in data]
+
+            pool = Pool(cpu_count()*COUNT)
+            pool.map(operate, data)
+            pool.close()
+            pool.join()
 
 
 def main():
