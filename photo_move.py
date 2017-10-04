@@ -174,7 +174,7 @@ def move_func(args):
 
 def dry_func(args):
     """
-    The function what do nothing except printing of information messages.
+    The function what does nothing except printing of information messages.
     :param str args.source: the source of the media files
     :param str args.destination: the destination of the media files
     """
@@ -193,7 +193,7 @@ def dry_func(args):
 
 def copy_func(args):
     """
-    The function to copy a media files from source to destination.
+    The function to copy media files from source to destination.
     :param str args.source: the source of the media files
     :param str args.destination: the destination of the media files
     """
@@ -242,7 +242,7 @@ def main():
 
     dry_run = subparsers.add_parser(
         'dry-run',
-        help="Dry-run mode. Do nothing, just print information."
+        help="Dry-run mode. Does nothing, just prints information."
     )
     dry_run.add_argument(
         '-s', '--source',
