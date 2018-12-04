@@ -1,5 +1,5 @@
 #!/usr/bin/env python
-#coding: utf-8
+# coding: utf-8
 
 import argparse
 import exifread
@@ -9,7 +9,7 @@ import shutil
 import sys
 import traceback
 
-from multiprocessing import Pool, cpu_count, Process
+from multiprocessing import Pool, cpu_count
 
 COUNT = 5
 
@@ -145,7 +145,7 @@ def file_list(path):
             sys.exit(0)
 
     else:
-        print '{} is not a directory'.format(path)
+        print('{} is not a directory'.format(path))
         sys.exit(0)
 
 
