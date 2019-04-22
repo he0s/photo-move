@@ -2,22 +2,21 @@
 # coding: utf-8
 
 import argparse
-import exifread
 import logging
 import os
 import shutil
 import sys
 import traceback
-
 from multiprocessing import Pool, cpu_count
+
+import exifread
 
 COUNT = 5
 
 
 class Photo:
-    """
-    The class describes basic model and methods of a media file.
-    """
+    """The class describes basic model and methods of a media file."""
+
     def __init__(self, path, dest, mode):
         self.file = path[0]
         self.path = path[1]
@@ -25,9 +24,8 @@ class Photo:
         self.mode = mode
 
     def get_exif(self):
-        """
-        The function to get EXIF information from a media file.
-        """
+        """The function to get EXIF information from a media file."""
+
         fl = open(self.path, 'rb')
         self.tags = exifread.process_file(fl)
         fl.close()
@@ -53,7 +51,7 @@ class Photo:
 
     def mv_file(self):
         """
-        The function what moves or makes a copy of a media file from
+        The function that moves or makes a copy of media files from
         source to destination.
         """
 
@@ -62,7 +60,7 @@ class Photo:
                 if not os.path.exists(os.path.join(self.dest, self.file)):
                     if self.mode == 'copy':
                         logging.info(
-                            'Copying of the file {}'.format(self.path)
+                            'Copying of: {}'.format(self.path)
                         )
                         shutil.copy(
                             self.path,
@@ -70,7 +68,7 @@ class Photo:
                         )
                     elif self.mode == 'move':
                         logging.info(
-                            'Moving of the file {}'.format(self.path)
+                            'Moving of: {}'.format(self.path)
                         )
                         shutil.move(
                             self.path,
@@ -86,7 +84,7 @@ class Photo:
             else:
                 if not os.path.exists(os.path.join(self.dest, self.file)):
                     logging.info(
-                        'Moving of the file {}'.format(self.path)
+                        'Moving of {} file'.format(self.path)
                     )
                 elif os.path.exists(os.path.join(self.dest, self.file)):
                     logging.warn(
@@ -97,8 +95,8 @@ class Photo:
 
         def _mv_file(self):
             if not os.path.isdir(self.dest):
-                logging.info('Directory {} is not exists'.format(self.dest))
-                logging.info('Creating the directory {}'.format(self.dest))
+                logging.info('Directory {} does not exist'.format(self.dest))
+                logging.info('Creating {} directory'.format(self.dest))
 
                 if self.mode != 'dry-run':
                     try:
@@ -132,8 +130,10 @@ class Photo:
 def file_list(path):
     """
     The function to make list of files, located in the source path.
+
     :param str path: the path where the media files are located
     """
+
     if os.path.isdir(path):
         data = [(i, os.path.join(path, i)) for i in os.listdir(path)]
         if data:
@@ -156,6 +156,7 @@ def operate(file_obj):
 def move_func(args):
     """
     The function to move media files from source to destination.
+
     :param str args.source: the source of the media files
     :param str args.destination: the destination of the media files
     """
@@ -174,7 +175,8 @@ def move_func(args):
 
 def dry_func(args):
     """
-    The function what does nothing except printing of information messages.
+    The function that does nothing except printing of information messages.
+
     :param str args.source: the source of the media files
     :param str args.destination: the destination of the media files
     """
@@ -194,6 +196,7 @@ def dry_func(args):
 def copy_func(args):
     """
     The function to copy media files from source to destination.
+
     :param str args.source: the source of the media files
     :param str args.destination: the destination of the media files
     """
